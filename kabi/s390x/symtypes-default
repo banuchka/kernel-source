@@ -1247,6 +1247,11 @@ segment_warning void segment_warning ( int , char * )
 empty_zero_page extern unsigned long empty_zero_page 
 zero_page_mask extern unsigned long zero_page_mask 
 
+/* arch/s390/mm/maccess.o */
+t#phys_addr_t typedef t#u64 phys_addr_t 
+xlate_dev_mem_ptr void * xlate_dev_mem_ptr ( t#phys_addr_t ) 
+unxlate_dev_mem_ptr void unxlate_dev_mem_ptr ( t#phys_addr_t , void * ) 
+
 /* arch/s390/mm/pgtable.o */
 s##sched_class
 s##cfs_rq
@@ -1499,7 +1504,6 @@ s#pci_dynids struct pci_dynids { t#spinlock_t lock ; s#list_head list ; }
 s#pci_driver struct pci_driver { s#list_head node ; const char * name ; const s#pci_device_id * id_table ; int ( * probe ) ( s#pci_dev * , const s#pci_device_id * ) ; void ( * remove ) ( s#pci_dev * ) ; int ( * suspend ) ( s#pci_dev * , t#pm_message_t ) ; int ( * suspend_late ) ( s#pci_dev * , t#pm_message_t ) ; int ( * resume_early ) ( s#pci_dev * ) ; int ( * resume ) ( s#pci_dev * ) ; void ( * shutdown ) ( s#pci_dev * ) ; int ( * sriov_configure ) ( s#pci_dev * , int ) ; const s#pci_error_handlers * err_handler ; s#device_driver driver ; s#pci_dynids dynids ; } 
 t#pci_power_t typedef int pci_power_t 
 t#pci_channel_state_t typedef unsigned int pci_channel_state_t 
-t#phys_addr_t typedef t#u64 phys_addr_t 
 t#resource_size_t typedef t#phys_addr_t resource_size_t 
 s#resource struct resource { t#resource_size_t start ; t#resource_size_t end ; const char * name ; unsigned long flags ; unsigned long desc ; s#resource * parent , * sibling , * child ; } 
 E#PCI_IOV_RESOURCES ( 5 ) + 2 
@@ -36779,6 +36783,7 @@ tty_buffer_space_avail extern int tty_buffer_space_avail ( s#tty_port * )
 tty_buffer_request_room extern int tty_buffer_request_room ( s#tty_port * , t#size_t ) 
 tty_insert_flip_string_fixed_flag extern int tty_insert_flip_string_fixed_flag ( s#tty_port * , const unsigned char * , char , t#size_t ) 
 tty_insert_flip_string_flags extern int tty_insert_flip_string_flags ( s#tty_port * , const unsigned char * , const char * , t#size_t ) 
+__tty_insert_flip_char int __tty_insert_flip_char ( s#tty_port * , unsigned char , char ) 
 tty_schedule_flip void tty_schedule_flip ( s#tty_port * ) 
 tty_prepare_flip_string extern int tty_prepare_flip_string ( s#tty_port * , unsigned char * * , t#size_t ) 
 tty_flip_buffer_push extern void tty_flip_buffer_push ( s#tty_port * ) 
@@ -37344,6 +37349,7 @@ vfio_del_group_dev extern void * vfio_del_group_dev ( s#device * )
 s##vfio_group
 vfio_group_get_external_user extern s#vfio_group * vfio_group_get_external_user ( s#file * ) 
 vfio_group_put_external_user extern void vfio_group_put_external_user ( s#vfio_group * ) 
+vfio_external_group_match_file extern t#bool vfio_external_group_match_file ( s#vfio_group * , s#file * ) 
 vfio_external_user_iommu_id extern int vfio_external_user_iommu_id ( s#vfio_group * ) 
 vfio_external_check_extension extern long vfio_external_check_extension ( s#vfio_group * , unsigned long ) 
 
@@ -38735,6 +38741,7 @@ s#coredump_params struct coredump_params { const t#siginfo_t * siginfo ; s#pt_re
 dump_emit extern int dump_emit ( s#coredump_params * , const void * , int ) 
 dump_skip extern int dump_skip ( s#coredump_params * , t#size_t ) 
 dump_align extern int dump_align ( s#coredump_params * , int ) 
+dump_truncate extern void dump_truncate ( s#coredump_params * ) 
 
 /* fs/dax.o */
 s##posix_acl
@@ -38833,6 +38840,7 @@ dax_truncate_page int dax_truncate_page ( s#inode * , t#loff_t , t#get_block_t )
 /* fs/dcache.o */
 sysctl_vfs_cache_pressure extern int sysctl_vfs_cache_pressure 
 rename_lock extern t#seqlock_t rename_lock 
+s#name_snapshot struct name_snapshot { const char * name ; char inline_name [ 32 ] ; } 
 s##posix_acl
 s##module
 s##device_private
@@ -38915,6 +38923,8 @@ s##mtd_info
 s##nlm_lockowner
 s##nfs4_lock_state
 s##cdev
+take_dentry_name_snapshot void take_dentry_name_snapshot ( s#name_snapshot * , s#dentry * ) 
+release_dentry_name_snapshot void release_dentry_name_snapshot ( s#name_snapshot * ) 
 __d_drop extern void __d_drop ( s#dentry * ) 
 d_drop extern void d_drop ( s#dentry * ) 
 dput extern void dput ( s#dentry * ) 
@@ -45511,7 +45521,6 @@ nfs_pgheader_init extern void nfs_pgheader_init ( s#nfs_pageio_descriptor * , s#
 nfs_generic_pg_test extern t#size_t nfs_generic_pg_test ( s#nfs_pageio_descriptor * , s#nfs_page * , s#nfs_page * ) 
 nfs_pgio_header_alloc s#nfs_pgio_header * nfs_pgio_header_alloc ( const s#nfs_rw_ops * ) 
 nfs_pgio_header_free void nfs_pgio_header_free ( s#nfs_pgio_header * ) 
-nfs_pgio_data_destroy void nfs_pgio_data_destroy ( s#nfs_pgio_header * ) 
 nfs_initiate_pgio int nfs_initiate_pgio ( s#rpc_clnt * , s#nfs_pgio_header * , s#rpc_cred * , const s#nfs_rpc_ops * , const s#rpc_call_ops * , int , int ) 
 nfs_pageio_init extern void nfs_pageio_init ( s#nfs_pageio_descriptor * , s#inode * , const s#nfs_pageio_ops * , const s#nfs_pgio_completion_ops * , const s#nfs_rw_ops * , t#size_t , int ) 
 nfs_generic_pgio int nfs_generic_pgio ( s#nfs_pageio_descriptor * , s#nfs_pgio_header * ) 
@@ -53801,9 +53810,9 @@ get_task_pid extern s#pid * get_task_pid ( s#task_struct * , e#pid_type )
 get_pid_task extern s#task_struct * get_pid_task ( s#pid * , e#pid_type ) 
 find_get_pid extern s#pid * find_get_pid ( int ) 
 pid_nr_ns t#pid_t pid_nr_ns ( s#pid * , s#pid_namespace * ) 
+task_tgid_nr_ns t#pid_t task_tgid_nr_ns ( s#task_struct * , s#pid_namespace * ) 
 pid_vnr t#pid_t pid_vnr ( s#pid * ) 
 __task_pid_nr_ns t#pid_t __task_pid_nr_ns ( s#task_struct * , e#pid_type , s#pid_namespace * ) 
-task_tgid_nr_ns t#pid_t task_tgid_nr_ns ( s#task_struct * , s#pid_namespace * ) 
 task_active_pid_ns extern s#pid_namespace * task_active_pid_ns ( s#task_struct * ) 
 
 /* kernel/pid_namespace.o */
@@ -56833,6 +56842,7 @@ irq_cpu_rmap_add extern int irq_cpu_rmap_add ( s#cpu_rmap * , int )
 
 /* lib/cpumask.o */
 cpumask_next_and int cpumask_next_and ( int , const s#cpumask * , const s#cpumask * ) 
+cpumask_next_wrap extern int cpumask_next_wrap ( int , const s#cpumask * , int , t#bool ) 
 cpumask_local_spread unsigned int cpumask_local_spread ( unsigned int , int ) 
 
 /* lib/crc-ccitt.o */
@@ -60739,6 +60749,7 @@ kstrndup extern char * kstrndup ( const char * , t#size_t , t#gfp_t )
 kmemdup extern void * kmemdup ( const void * , t#size_t , t#gfp_t ) 
 memdup_user extern void * memdup_user ( const void * , t#size_t ) 
 strndup_user extern char * strndup_user ( const char * , long ) 
+memdup_user_nul extern void * memdup_user_nul ( const void * , t#size_t ) 
 s##posix_acl
 s##vfsmount
 s##module
@@ -87844,6 +87855,9 @@ xt_hook_link s#nf_hook_ops * xt_hook_link ( const s#xt_table * , t#nf_hookfn * )
 xt_hook_unlink void xt_hook_unlink ( const s#xt_table * , s#nf_hook_ops * ) 
 xt_proto_init int xt_proto_init ( s#net * , t#u_int8_t ) 
 xt_proto_fini void xt_proto_fini ( s#net * , t#u_int8_t ) 
+s#xt_percpu_counter_alloc_state struct xt_percpu_counter_alloc_state { unsigned int off ; const char * mem ; } 
+xt_percpu_counter_alloc t#bool xt_percpu_counter_alloc ( s#xt_percpu_counter_alloc_state * , s#xt_counters * ) 
+xt_percpu_counter_free void xt_percpu_counter_free ( s#xt_counters * ) 
 
 /* net/netfilter/xt_RATEEST.o */
 s#gnet_estimator struct gnet_estimator { signed char interval ; unsigned char ewma_log ; } 
